@@ -26,7 +26,7 @@ const LoginForm = ({ onSubmit }) => {
                     <div className="row my-3">
                         <div
                             className="col-12 mx-auto"
-                            style={{ 'max-width': '400px' }}
+                            style={{ maxWidth: '400px' }}
                         >
                             <Input
                                 required
@@ -40,12 +40,12 @@ const LoginForm = ({ onSubmit }) => {
                     <div className="row my-3">
                         <div
                             className="col-12 mx-auto"
-                            style={{ 'max-width': '400px' }}
+                            style={{ maxWidth: '400px' }}
                         >
                             <Input
                                 required
-                                type="password"
                                 placeholder="Password"
+                                type="password"
                                 name="password"
                                 onChange={setPassword}
                             ></Input>
