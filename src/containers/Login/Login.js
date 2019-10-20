@@ -6,15 +6,15 @@ import { getUser } from '../../redux/selectors';
 import LoginForm from '../../components/LoginForm';
 
 const Login = ({ login, user: { username }, history }) => {
-    if (username) history.push('/');
-
     const doLogin = ({ username, password }, onError) => {
         console.log(`doLogin executed with u: ${username} and p: ${password}`);
 
-        if (username !== 'Alfred' || password !== 'storstein') {
+        if (username !== 'Sasuke' || password !== 'storesteiner') {
             onError("Are you sure you didn't misspell something?");
         } else {
             login(username);
+            window.localStorage.setItem('user', username);
+            history.push('/');
         }
     };
 
