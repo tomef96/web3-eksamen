@@ -1,0 +1,17 @@
+.side-nav {
+}
+
+.side-nav-header {
+    margin: 0;
+    padding: 7px 10px;
+}
+
+.side-nav-button {
+    padding: 7px 10px;
+}
+
+.side-nav-button:hover {
+    background-color: gainsboro;
+    transition: 0.3s;
+    cursor: pointer;
+}

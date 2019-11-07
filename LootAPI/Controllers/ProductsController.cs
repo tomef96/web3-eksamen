@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LootAPI.Models;
 using Microsoft.AspNetCore.Cors;
@@ -43,8 +44,24 @@ namespace LootAPI.Controllers
         {
             _context.Add(product);
             await _context.SaveChangesAsync();
-            //return CreatedAtAction()
             return Created("products/" + product.Id, product);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Product>> Update(Product product)
+        {
+            _context.Product.Update(product);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Product>> Delete(int id)
+        {
+            var product = await _context.Product.FindAsync(id);
+            _context.Product.Remove(product);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }

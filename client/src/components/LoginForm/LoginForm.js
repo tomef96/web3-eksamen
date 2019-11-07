@@ -6,12 +6,12 @@ import Input from '../Input/Input'
 
 const LoginForm = ({ onSubmit }) => {
     const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const [passphrase, setPassphrase] = useState('')
     const [error, setError] = useState('')
 
     const handleSubmit = event => {
         event.preventDefault()
-        onSubmit({ username, password }, onError)
+        onSubmit({ username, passphrase }, onError)
     }
 
     const onError = error => {
@@ -47,7 +47,7 @@ const LoginForm = ({ onSubmit }) => {
                                 placeholder="Password"
                                 type="password"
                                 name="password"
-                                onChange={setPassword}
+                                onChange={setPassphrase}
                             />
                         </div>
                     </div>

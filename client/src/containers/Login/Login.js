@@ -6,18 +6,19 @@ import { getUser } from '../../redux/selectors'
 import LoginForm from '../../components/LoginForm'
 import axios from 'axios'
 
-const Login = ({ login, user: { username }, history }) => {
-    const doLogin = ({ username, password }, onError) => {
+const Login = ({ login, history }) => {
+    const doLogin = ({ username, passphrase }, onError) => {
         axios
-            .post('/auth', { username, password })
+            .post('/auth', { username, passphrase })
             .then(res => {
                 login(username)
-                window.localStorage.setItem('auth', res.token)
+                // Set token in localstorage to stay logged in on refresh.
+                window.localStorage.setItem('auth', res.data.token)
                 history.push('/')
             })
             .catch(error => {
-                console.log(error)
-                switch (error.status) {
+                console.log(error.response)
+                switch (error.response.status) {
                     case 401: {
                         onError("Are you sure you didn't misspell something?")
                         break
@@ -32,8 +33,8 @@ const Login = ({ login, user: { username }, history }) => {
 
     return (
         <div className="container text-center">
-            <h1>LoginPage</h1>
-            <LoginForm onSubmit={doLogin}></LoginForm>
+            <h1>Loot Admin</h1>
+            <LoginForm onSubmit={doLogin} />
         </div>
     )
 }

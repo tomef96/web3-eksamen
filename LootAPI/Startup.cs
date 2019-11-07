@@ -28,8 +28,6 @@ namespace LootAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAnyOrigin",
@@ -37,6 +35,9 @@ namespace LootAPI
             });
 
             services.AddDbContext<ProductsContext>(options => options.UseSqlite("Data Source=Loot.db"));
+            
+            services.AddControllers();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,7 +48,7 @@ namespace LootAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors();
+            app.UseCors("AllowAnyOrigin");
 
             app.UseHttpsRedirection();
 

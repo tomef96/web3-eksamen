@@ -1,2 +1,6 @@
-export const LOGIN = 'LOGIN';
-export const LOGOUT = 'LOGOUT';
+export const LOGIN = 'LOGIN'
+export const LOGOUT = 'LOGOUT'
+
+export const REQUEST_PRODUCTS = 'REQUEST_PRODUCTS'
+export const RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS'
+export const RECEIVE_ERROR = 'RECEIVE_ERROR'

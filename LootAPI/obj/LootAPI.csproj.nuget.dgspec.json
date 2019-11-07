@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Tom\\Dev\\web3\\LootAPI\\LootAPI.csproj": {}
+    "C:\\Users\\Tom\\Dev\\web3\\web3-eksamen\\LootAPI\\LootAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Tom\\Dev\\web3\\LootAPI\\LootAPI.csproj": {
+    "C:\\Users\\Tom\\Dev\\web3\\web3-eksamen\\LootAPI\\LootAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Tom\\Dev\\web3\\LootAPI\\LootAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Tom\\Dev\\web3\\web3-eksamen\\LootAPI\\LootAPI.csproj",
         "projectName": "LootAPI",
-        "projectPath": "C:\\Users\\Tom\\Dev\\web3\\LootAPI\\LootAPI.csproj",
+        "projectPath": "C:\\Users\\Tom\\Dev\\web3\\web3-eksamen\\LootAPI\\LootAPI.csproj",
         "packagesPath": "C:\\Users\\Tom\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Tom\\Dev\\web3\\LootAPI\\obj\\",
+        "outputPath": "C:\\Users\\Tom\\Dev\\web3\\web3-eksamen\\LootAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

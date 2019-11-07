@@ -5,8 +5,7 @@ import { connect } from 'react-redux'
 import { logout } from '../../redux/actions'
 
 const links = {
-    Home: '/',
-    'Non Existing': '/notfound'
+    Home: '/'
 }
 
 const mapLinks = () => {
@@ -28,13 +27,13 @@ const mapLinks = () => {
 
 const Navbar = ({ logout }) => {
     return (
-        <nav className="navbar navbar-expand-sm navbar-light bg-light fixed-top">
+        <nav className="navbar navbar-expand-sm navbar-light bg-light shadow-sm">
             <Link
                 className="navbar-brand"
                 to="#"
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
-                Exam
+                Loot Lunatics
             </Link>
             <button
                 className="navbar-toggler"
@@ -45,7 +44,7 @@ const Navbar = ({ logout }) => {
                 aria-expanded="false"
                 aria-label="Toggle navigation"
             >
-                <span className="navbar-toggler-icon"></span>
+                <span className="navbar-toggler-icon" />
             </button>
 
             <div
@@ -64,7 +63,7 @@ const Navbar = ({ logout }) => {
                             to="#"
                             onClick={() => {
                                 logout()
-                                window.localStorage.removeItem('user')
+                                window.localStorage.removeItem('auth')
                             }}
                         >
                             Logout

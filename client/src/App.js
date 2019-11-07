@@ -9,6 +9,7 @@ import { login } from './redux/actions'
 import { getUser } from './redux/selectors'
 import Navbar from './components/Navbar/Navbar'
 import NotFound from './containers/NotFound'
+import Product from './containers/Product'
 
 const mapStateToProps = state => {
     const user = getUser(state)
@@ -23,9 +24,10 @@ const App = ({ user, login }) => {
 
     return (
         <Router>
-            <Navbar />
-            <div className="App" style={{ marginTop: '64px' }}>
+            <div className="App">
+                <Navbar />
                 <Switch>
+                    <Route path="/product/:id" component={Product} />
                     <Route path="/login" component={Login} />
                     <Route exact path="/" component={Home} />
                     <Route component={NotFound} />

@@ -1,7 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Input = ({ onChange, placeholder, name, type, autoFocus, ...rest }) => {
+const Input = ({
+    onChange,
+    placeholder,
+    name,
+    type,
+    autoFocus,
+    value,
+    ...rest
+}) => {
     return (
         <input
             {...rest}
@@ -12,6 +20,7 @@ const Input = ({ onChange, placeholder, name, type, autoFocus, ...rest }) => {
             name={name}
             data-test={name}
             onChange={e => onChange(e.target.value)}
+            value={value}
         />
     )
 }
