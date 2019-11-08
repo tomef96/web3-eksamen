@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import ProductForm from '../ProductForm'
 import { Link } from 'react-router-dom'
 import { rarityColors } from '../../constants'
+import Modal from '../Modal'
 
 const colors = { strength: '#c22d0c', intellect: '#0c43c2', agility: '#24c20c' }
 
@@ -88,15 +89,7 @@ const ProductListElement = ({
                     className="btn btn-link"
                     //onClick={() => setIsEditing(true)}
                     data-toggle="modal"
-                    data-target="#updateProductModal"
-                    data-product={JSON.stringify({
-                        id,
-                        name,
-                        description,
-                        rarity,
-                        stock,
-                        stats
-                    })}
+                    data-target={`#editProductModal${id}`}
                 >
                     Edit
                 </button>
@@ -114,6 +107,13 @@ const ProductListElement = ({
                     Delete
                 </button>
             </div>
+
+            <Modal id={`editProductModal${id}`}>
+                <ProductForm
+                    editing={{ id, name, description, rarity, stock, stats }}
+                    onSubmit={product => handleDoneEditing({ id, ...product })}
+                />
+            </Modal>
         </div>
     )
 }

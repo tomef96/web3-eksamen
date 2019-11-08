@@ -38,7 +38,7 @@ const ProductForm = ({ editing, onSubmit }) => {
         return Object.keys(stats).map(key => (
             <li className="list-group-item" key={key}>
                 <div className="d-flex flex-row align-items-center">
-                    {key} : {stats[key]}
+                    {key[0].toUpperCase() + key.slice(1)} : {stats[key]}
                     <button
                         type="button"
                         className="btn btn-outline-danger btn-sm ml-auto"
@@ -59,7 +59,7 @@ const ProductForm = ({ editing, onSubmit }) => {
             if (currentStatKey && currentStatValue) {
                 setStats({
                     ...stats,
-                    [currentStatKey]: value
+                    [currentStatKey.toLowerCase()]: value
                 })
             }
         }
@@ -158,9 +158,10 @@ const ProductForm = ({ editing, onSubmit }) => {
                                 onChange={e => setRarity(e.target.value)}
                                 value={rarity}
                             >
-                                {Object.keys(rarityColors).map(stat => (
-                                    <option key={stat} value={stat}>
-                                        {stat}
+                                {Object.keys(rarityColors).map(rarity => (
+                                    <option key={rarity} value={rarity}>
+                                        {rarity[0].toUpperCase() +
+                                            rarity.slice(1)}
                                     </option>
                                 ))}
                             </select>
@@ -220,7 +221,12 @@ const ProductForm = ({ editing, onSubmit }) => {
                             className="col-1 mx-auto"
                             style={{ maxWidth: '400px' }}
                         >
-                            <button className="btn btn-primary">
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={e => handleSubmit(e)}
+                                data-dismiss="modal"
+                            >
                                 {editing ? 'Done' : 'Create'}
                             </button>
                         </div>

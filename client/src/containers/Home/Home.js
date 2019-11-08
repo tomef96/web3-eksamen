@@ -71,7 +71,12 @@ const Home = ({
     return (
         <Grid fluid={true}>
             <Row style={{ minHeight: '100vh' }}>
-                <Column size={12} md={2} style={{ backgroundColor: '#f5f5f5' }}>
+                <Column
+                    size={12}
+                    md={2}
+                    className="p-0"
+                    style={{ backgroundColor: '#f5f5f5' }}
+                >
                     <SideNav />
                 </Column>
                 <Column
