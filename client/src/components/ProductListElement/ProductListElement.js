@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import ProductForm from '../ProductForm'
+import { Link } from 'react-router-dom'
+import { rarityColors } from '../../constants'
 
 const colors = { strength: '#c22d0c', intellect: '#0c43c2', agility: '#24c20c' }
 
@@ -8,8 +10,9 @@ const ProductListElement = ({
     id,
     name,
     description,
+    rarity,
     stats,
-    onDelete,
+    stock,
     onEditingDone
 }) => {
     const [isEditing, setIsEditing] = useState(false)
@@ -22,7 +25,6 @@ const ProductListElement = ({
                         className="list-inline-item"
                         style={{
                             color: colors[key] || 'grey',
-                            /*borderRight: 'solid grey 1px',*/
                             paddingRight: '10px'
                         }}
                         key={key}
@@ -43,19 +45,39 @@ const ProductListElement = ({
     if (isEditing) {
         return (
             <ProductForm
-                editing={{ name, description, stats }}
-                onSubmit={(name, description, stats) => {
+                editing={{ name, description, rarity, stock, stats }}
+                onSubmit={product => {
                     setIsEditing(false)
-                    handleDoneEditing({ id, name, description, stats })
+                    handleDoneEditing({
+                        id,
+                        ...product
+                    })
                 }}
             />
         )
     }
 
+    const stockStyle = {
+        color: stock >= 10 ? 'green' : stock >= 5 ? '#e0cc16' : 'red'
+    }
+
+    const nameStyle = {
+        color: rarityColors[rarity] || 'green'
+    }
+
     return (
         <div className="d-flex flex-column flex-md-row justify-content-between">
-            <div className="d-flex flex-column">
-                <div className="font-weight-bold">{name}</div>
+            <div className="d-flex flex-column flex-grow-1">
+                <div className="d-flex flex-row">
+                    <div className="font-weight-bold">
+                        <Link style={nameStyle} to={`/product/${id}`}>
+                            {name}
+                        </Link>
+                    </div>
+                    <div className="ml-2" style={stockStyle}>
+                        ({stock} in stock)
+                    </div>
+                </div>
                 <div className="font-weight-normal">{description}</div>
                 <ul className="list-group list-group-horizontal-sm flex-wrap">
                     {renderStats()}
@@ -64,7 +86,17 @@ const ProductListElement = ({
             <div className="d-flex flex-row align-self-center align-items-center">
                 <button
                     className="btn btn-link"
-                    onClick={() => setIsEditing(true)}
+                    //onClick={() => setIsEditing(true)}
+                    data-toggle="modal"
+                    data-target="#updateProductModal"
+                    data-product={JSON.stringify({
+                        id,
+                        name,
+                        description,
+                        rarity,
+                        stock,
+                        stats
+                    })}
                 >
                     Edit
                 </button>

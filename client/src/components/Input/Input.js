@@ -8,20 +8,24 @@ const Input = ({
     type,
     autoFocus,
     value,
+    label,
     ...rest
 }) => {
     return (
-        <input
-            {...rest}
-            className="form-control"
-            autoFocus={autoFocus}
-            type={type}
-            placeholder={placeholder}
-            name={name}
-            data-test={name}
-            onChange={e => onChange(e.target.value)}
-            value={value}
-        />
+        <div className="form-group">
+            {label ? <label>{placeholder}</label> : null}
+            <input
+                {...rest}
+                className="form-control"
+                autoFocus={autoFocus}
+                type={type}
+                placeholder={placeholder}
+                name={name}
+                data-test={name}
+                onChange={e => onChange(e.target.value)}
+                value={value}
+            />
+        </div>
     )
 }
 

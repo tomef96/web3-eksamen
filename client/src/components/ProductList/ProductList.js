@@ -7,18 +7,22 @@ const ProductList = ({ products, onEditingDone, onDelete }) => {
         <div className="mx-md-auto" style={{ maxWidth: '800px' }}>
             <h2>Products</h2>
             <ul className="list-group ">
-                {products.map(({ id, name, description, ...stats }) => (
-                    <li className="list-group-item" key={id}>
-                        <ProductListElement
-                            id={id}
-                            name={name}
-                            description={description}
-                            stats={stats}
-                            onDelete={() => onDelete(id)}
-                            onEditingDone={onEditingDone}
-                        />
-                    </li>
-                ))}
+                {products.map(
+                    ({ id, name, description, stock, rarity, ...stats }) => (
+                        <li className="list-group-item" key={id}>
+                            <ProductListElement
+                                id={id}
+                                name={name}
+                                description={description}
+                                rarity={rarity}
+                                stats={stats}
+                                stock={stock}
+                                onDelete={() => onDelete(id)}
+                                onEditingDone={onEditingDone}
+                            />
+                        </li>
+                    )
+                )}
             </ul>
         </div>
     )

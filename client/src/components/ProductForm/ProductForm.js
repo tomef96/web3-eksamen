@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Input from '../Input'
-import { statKeys } from '../../constants'
+import { rarityColors, statKeys } from '../../constants'
+import { filterOutNullValues } from '../../utils'
 
 const ProductForm = ({ editing, onSubmit }) => {
     const [name, setName] = useState('')
@@ -9,15 +10,8 @@ const ProductForm = ({ editing, onSubmit }) => {
     const [currentStatKey, setCurrentStatKey] = useState(statKeys[0])
     const [currentStatValue, setCurrentStatValue] = useState('')
     const [stats, setStats] = useState({})
-
-    const filterOutNullStats = editingStats => {
-        return Object.keys(editingStats).reduce((acc, stat) => {
-            if (editingStats[stat] === 0) {
-                return { ...acc }
-            }
-            return { ...acc, [stat]: editingStats[stat] }
-        }, {})
-    }
+    const [stock, setStock] = useState('')
+    const [rarity, setRarity] = useState('common')
 
     const resetState = () => {
         setName('')
@@ -25,6 +19,8 @@ const ProductForm = ({ editing, onSubmit }) => {
         setCurrentStatKey('')
         setCurrentStatValue('')
         setStats({})
+        setStock('')
+        setRarity('common')
     }
 
     const handleRemoveStat = stat => {
@@ -69,25 +65,40 @@ const ProductForm = ({ editing, onSubmit }) => {
         }
     }
 
+    const handleSetStock = stock => {
+        if (stock === '') {
+            setStock(stock)
+        } else {
+            const value = parseInt(stock)
+            if (isNaN(value)) {
+                alert(`The value of Stock have to be a number`)
+            } else {
+                setStock(value)
+            }
+        }
+    }
+
     const handleSubmit = event => {
         event.preventDefault()
-        onSubmit(name, description, stats)
+        onSubmit({ name, description, stock, rarity, stats })
         resetState()
     }
 
     useEffect(() => {
         if (editing) {
-            const { name, description, stats } = editing
+            const { name, description, stock, rarity, stats } = editing
             setName(name)
             setDescription(description)
-            setStats(filterOutNullStats(stats))
+            setRarity(rarity || 'common')
+            setStats(filterOutNullValues(stats))
+            setStock(stock)
         }
     }, [editing])
 
     return (
         <div>
             <form onSubmit={e => handleSubmit(e)}>
-                <div className="form-group">
+                <div className="form-group px-2">
                     <div className="row my-3">
                         <div
                             className="col-12 mx-auto"
@@ -99,6 +110,8 @@ const ProductForm = ({ editing, onSubmit }) => {
                                 onChange={e => setName(e)}
                                 placeholder={'Product Name'}
                                 value={name}
+                                id="productName"
+                                label="Name"
                             />
                         </div>
                     </div>
@@ -114,7 +127,43 @@ const ProductForm = ({ editing, onSubmit }) => {
                                 onChange={e => setDescription(e)}
                                 placeholder={'Product Description'}
                                 value={description}
+                                label="Description"
                             />
+                        </div>
+                    </div>
+
+                    <div className="row my-3">
+                        <div
+                            className="col-12 mx-auto"
+                            style={{ maxWidth: '400px' }}
+                        >
+                            <Input
+                                name={'productStock'}
+                                autoFocus={true}
+                                onChange={e => handleSetStock(e)}
+                                placeholder={'Number in Stock'}
+                                value={stock}
+                                label="Stock"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="row my-3">
+                        <div
+                            className="col-12 mx-auto"
+                            style={{ maxWidth: '400px' }}
+                        >
+                            <select
+                                className="custom-select"
+                                onChange={e => setRarity(e.target.value)}
+                                value={rarity}
+                            >
+                                {Object.keys(rarityColors).map(stat => (
+                                    <option key={stat} value={stat}>
+                                        {stat}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </div>
 
@@ -146,7 +195,10 @@ const ProductForm = ({ editing, onSubmit }) => {
                             </select>
                         </div>
 
-                        <div className="col-6" style={{ maxWidth: '200px' }}>
+                        <div
+                            className="col-6 mr-auto mr-sm-0"
+                            style={{ maxWidth: '200px' }}
+                        >
                             <Input
                                 name={'productStatValue'}
                                 autoFocus={true}
@@ -157,7 +209,7 @@ const ProductForm = ({ editing, onSubmit }) => {
                         </div>
                         <button
                             type="button"
-                            className="btn btn-primary mr-auto"
+                            className="btn btn-primary mx-auto mb-auto"
                             onClick={handleSetStats}
                         >
                             +
@@ -180,7 +232,19 @@ const ProductForm = ({ editing, onSubmit }) => {
 }
 
 ProductForm.propTypes = {
-    editing: PropTypes.object,
+    editing: PropTypes.shape({
+        name: PropTypes.string,
+        description: PropTypes.string,
+        rarity: PropTypes.string,
+        stock: PropTypes.number,
+        stats: PropTypes.shape({
+            strength: PropTypes.number,
+            intellect: PropTypes.number,
+            agility: PropTypes.number,
+            armour: PropTypes.number,
+            damage: PropTypes.number
+        })
+    }),
     onSubmit: PropTypes.func.isRequired
 }
 

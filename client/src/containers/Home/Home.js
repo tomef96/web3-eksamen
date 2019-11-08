@@ -13,11 +13,10 @@ import SideNav from '../../components/SideNav'
 import ProductList from '../../components/ProductList'
 import Loader from '../../components/Loader/Loader'
 import $ from 'jquery'
-
-const mapStateToProps = state => {
-    // { products, isLoading, error }
-    return { ...getProducts(state) }
-}
+import Modal from '../../components/Modal'
+import Grid from '../../components/Grid/Grid'
+import Row from '../../components/Grid/Row'
+import Column from '../../components/Grid/Column'
 
 const Home = ({
     products,
@@ -32,27 +31,17 @@ const Home = ({
         fetchProducts()
     }, [fetchProducts])
 
-    const handleDelete = event => {
+    const handleDelete = () => {
         let id = $('#delete-btn').data('data-id')
-        console.log(id)
         deleteProduct(id)
     }
 
-    const handleCreate = (name, description, stats) => {
-        postProduct(name, description, stats)
-    }
-
-    const handleEditingDone = product => {
-        console.log(product)
-        putProduct(product)
-    }
-
-    const mainWindowStyle = {
-        maxHeight: '94vh',
-        overflowY: 'scroll',
-        paddingBottom: '30vh'
-    }
-    console.log({ products, isLoading, error })
+    $('#deleteProductModal').on('show.bs.modal', event => {
+        let button = $(event.relatedTarget)
+        let product = button.data('product')
+        let modal = $('#deleteProductModal')
+        modal.find('#delete-btn').data('data-id', product.id)
+    })
 
     const content = () => {
         const center =
@@ -67,83 +56,81 @@ const Home = ({
         return (
             <ProductList
                 products={products}
-                onEditingDone={handleEditingDone}
+                onEditingDone={putProduct}
                 onDelete={handleDelete}
             />
         )
     }
 
-    $('#deleteProductModal').on('show.bs.modal', event => {
-        let button = $(event.relatedTarget)
-        let product = button.data('product')
-        let modal = $('#deleteProductModal')
-        modal.find('#delete-btn').data('data-id', product.id)
-    })
+    const mainWindowStyle = {
+        maxHeight: '94vh',
+        overflowY: 'scroll',
+        paddingBottom: '30vh'
+    }
 
     return (
-        <div className="container-fluid">
-            <div className="row" style={{ minHeight: '100vh' }}>
-                <div
-                    className="col-12 col-md-2 p-0"
-                    style={{ backgroundColor: '#f5f5f5' }}
-                >
+        <Grid fluid={true}>
+            <Row style={{ minHeight: '100vh' }}>
+                <Column size={12} md={2} style={{ backgroundColor: '#f5f5f5' }}>
                     <SideNav />
-                </div>
-                <div className="col-12 col-md-10 pt-2" style={mainWindowStyle}>
+                </Column>
+                <Column
+                    size={12}
+                    md={10}
+                    className="pt-2"
+                    style={mainWindowStyle}
+                >
                     {content()}
-                </div>
-            </div>
+                </Column>
+            </Row>
 
-            <div
-                className="modal fade"
-                id="createProductModal"
-                tabIndex="-1"
-                role="dialog"
-                aria-labelledby="createProductModal"
-                aria-hidden="true"
-            >
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <ProductForm onSubmit={handleCreate} />
-                    </div>
-                </div>
-            </div>
+            <Modal id="createProductModal">
+                <ProductForm onSubmit={postProduct} />
+            </Modal>
 
-            <div
-                className="modal fade"
-                id="deleteProductModal"
-                tabIndex="-1"
-                role="dialog"
-                aria-labelledby="deleteProductModal"
-                aria-hidden="true"
-            >
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content d-flex flex-column justify-content-center align-items-center">
-                        <div className="modal-body">
-                            <h4>Are you sure?</h4>
-                        </div>
-                        <div className="modal-footer">
-                            <button
-                                id="delete-btn"
-                                className="btn btn-danger"
-                                data-dismiss="modal"
-                                onClick={() => handleDelete(this)}
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </div>
+            <Modal id="deleteProductModal">
+                <div className="modal-body">
+                    <h4>Are you sure?</h4>
                 </div>
-            </div>
-        </div>
+                <div className="modal-footer">
+                    <button
+                        id="delete-btn"
+                        className="btn btn-danger"
+                        data-dismiss="modal"
+                        onClick={handleDelete}
+                    >
+                        Delete
+                    </button>
+                </div>
+            </Modal>
+        </Grid>
     )
 }
 
 Home.propTypes = {
-    user: PropTypes.object
+    products: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            description: PropTypes.string.isRequired,
+            stats: PropTypes.shape({
+                strength: PropTypes.number,
+                intellect: PropTypes.number,
+                agility: PropTypes.number,
+                armour: PropTypes.number,
+                damage: PropTypes.number
+            })
+        })
+    ).isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    error: PropTypes.string,
+    fetchProducts: PropTypes.func,
+    postProduct: PropTypes.func,
+    putProduct: PropTypes.func,
+    deleteProduct: PropTypes.func
 }
 
 export default connect(
-    mapStateToProps,
+    state => ({ ...getProducts(state) }),
     { fetchProducts, postProduct, putProduct, deleteProduct }
 )(Home)

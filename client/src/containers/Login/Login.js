@@ -1,52 +1,30 @@
-import React from 'react'
-//import PropTypes from 'prop-types';
+import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { login } from '../../redux/actions'
-import { getUser } from '../../redux/selectors'
+import { authenticate } from '../../redux/actions'
 import LoginForm from '../../components/LoginForm'
-import axios from 'axios'
+import { getUser } from '../../redux/selectors'
 
-const Login = ({ login, history }) => {
-    const doLogin = ({ username, passphrase }, onError) => {
-        axios
-            .post('/auth', { username, passphrase })
-            .then(res => {
-                login(username)
-                // Set token in localstorage to stay logged in on refresh.
-                window.localStorage.setItem('auth', res.data.token)
-                history.push('/')
-            })
-            .catch(error => {
-                console.log(error.response)
-                switch (error.response.status) {
-                    case 401: {
-                        onError("Are you sure you didn't misspell something?")
-                        break
-                    }
-                    default: {
-                        onError('The service might not be available')
-                        break
-                    }
-                }
-            })
-    }
+const Login = ({ username, history, authenticate }) => {
+    useEffect(() => {
+        if (username) history.push('/')
+    }, [username, history])
 
     return (
         <div className="container text-center">
             <h1>Loot Admin</h1>
-            <LoginForm onSubmit={doLogin} />
+            <LoginForm onSubmit={authenticate} />
         </div>
     )
 }
 
-const mapStateToProps = state => {
-    const user = getUser(state)
-    return { user }
+Login.propTypes = {
+    username: PropTypes.string,
+    history: PropTypes.object.isRequired,
+    authenticate: PropTypes.func.isRequired
 }
 
-//Login.propTypes = {};
-
 export default connect(
-    mapStateToProps,
-    { login }
+    store => ({ ...getUser(store) }),
+    { authenticate }
 )(Login)

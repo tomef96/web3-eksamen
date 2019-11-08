@@ -11,6 +11,7 @@ import store from './redux/store'
 import axios from 'axios'
 axios.defaults.baseURL = 'https://localhost:5001'
 
+// For development purposes
 window.store = store
 
 ReactDOM.render(
