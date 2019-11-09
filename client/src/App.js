@@ -10,6 +10,10 @@ import { getUser } from './redux/selectors'
 import Navbar from './components/Navbar/Navbar'
 import NotFound from './containers/NotFound'
 import Product from './containers/Product'
+import Grid from './components/Grid/Grid'
+import Row from './components/Grid/Row'
+import Column from './components/Grid/Column'
+import SideNav from './components/SideNav'
 
 const mapStateToProps = state => {
     const user = getUser(state)
@@ -24,15 +28,26 @@ const App = ({ user, login }) => {
 
     return (
         <Router>
-            <div className="App">
-                <Navbar />
-                <Switch>
-                    <Route path="/product/:id" component={Product} />
-                    <Route path="/login" component={Login} />
-                    <Route exact path="/" component={Home} />
-                    <Route component={NotFound} />
-                </Switch>
-            </div>
+            <Grid fluid={true} className="App p-0 m-0">
+                <Row>
+                    <Column size={12}>
+                        <Navbar />
+                    </Column>
+                </Row>
+                <Row style={{ minHeight: '100vh' }}>
+                    <Column size={12} md={2}>
+                        <SideNav />
+                    </Column>
+                    <Column size={12} md={10}>
+                        <Switch>
+                            <Route path="/product/:id" component={Product} />
+                            <Route path="/login" component={Login} />
+                            <Route exact path="/" component={Home} />
+                            <Route component={NotFound} />
+                        </Switch>
+                    </Column>
+                </Row>
+            </Grid>
         </Router>
     )
 }

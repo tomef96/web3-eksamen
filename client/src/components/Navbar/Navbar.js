@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { logout } from '../../redux/actions'
 
 const links = {
-    Home: '/'
+    Products: '/'
 }
 
 const mapLinks = () => {

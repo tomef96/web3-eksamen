@@ -9,7 +9,6 @@ import {
     deleteProduct
 } from '../../redux/actions'
 import ProductForm from '../../components/ProductForm'
-import SideNav from '../../components/SideNav'
 import ProductList from '../../components/ProductList'
 import Loader from '../../components/Loader/Loader'
 import $ from 'jquery'
@@ -17,6 +16,7 @@ import Modal from '../../components/Modal'
 import Grid from '../../components/Grid/Grid'
 import Row from '../../components/Grid/Row'
 import Column from '../../components/Grid/Column'
+import ProductListElement from '../../components/ProductListElement'
 
 const Home = ({
     products,
@@ -54,11 +54,39 @@ const Home = ({
             )
         if (error) return <div className={center}>{error}</div>
         return (
-            <ProductList
+            /*<ProductList
                 products={products}
                 onEditingDone={putProduct}
                 onDelete={handleDelete}
-            />
+            />*/
+            <div className="mx-md-auto" style={{ maxWidth: '800px' }}>
+                <h2>Products</h2>
+                <ul className="list-group ">
+                    {products.map(
+                        ({
+                            id,
+                            name,
+                            description,
+                            stock,
+                            rarity,
+                            ...stats
+                        }) => (
+                            <li className="list-group-item" key={id}>
+                                <ProductListElement
+                                    id={id}
+                                    name={name}
+                                    description={description}
+                                    rarity={rarity}
+                                    stats={stats}
+                                    stock={stock}
+                                    onDelete={() => handleDelete(id)}
+                                    onEditingDone={putProduct}
+                                />
+                            </li>
+                        )
+                    )}
+                </ul>
+            </div>
         )
     }
 
@@ -71,20 +99,7 @@ const Home = ({
     return (
         <Grid fluid={true}>
             <Row style={{ minHeight: '100vh' }}>
-                <Column
-                    size={12}
-                    md={2}
-                    className="p-0"
-                    style={{ backgroundColor: '#f5f5f5' }}
-                >
-                    <SideNav />
-                </Column>
-                <Column
-                    size={12}
-                    md={10}
-                    className="pt-2"
-                    style={mainWindowStyle}
-                >
+                <Column size={12} className="pt-2" style={mainWindowStyle}>
                     {content()}
                 </Column>
             </Row>
