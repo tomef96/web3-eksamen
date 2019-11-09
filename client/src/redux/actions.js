@@ -51,7 +51,6 @@ export const postProduct = ({ name, description, stock, rarity, stats }) => {
             .post('/products', { name, description, rarity, stock, ...stats })
             .then(
                 res => {
-                    console.log(res)
                     dispatch(fetchProducts())
                 },
                 error => {

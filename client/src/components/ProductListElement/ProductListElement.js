@@ -16,27 +16,6 @@ const ProductListElement = ({
     stock,
     onEditingDone
 }) => {
-    const [isEditing, setIsEditing] = useState(false)
-
-    const handleDoneEditing = product => {
-        onEditingDone(product)
-    }
-
-    if (isEditing) {
-        return (
-            <ProductForm
-                editing={{ name, description, rarity, stock, stats }}
-                onSubmit={product => {
-                    setIsEditing(false)
-                    handleDoneEditing({
-                        id,
-                        ...product
-                    })
-                }}
-            />
-        )
-    }
-
     const stockStyle = {
         color: stock >= 10 ? 'green' : stock >= 5 ? '#e0cc16' : 'red'
     }
@@ -105,7 +84,7 @@ const ProductListElement = ({
             <Modal id={`editProductModal${id}`}>
                 <ProductForm
                     editing={{ id, name, description, rarity, stock, stats }}
-                    onSubmit={product => handleDoneEditing({ id, ...product })}
+                    onSubmit={product => onEditingDone({ id, ...product })}
                 />
             </Modal>
         </div>
@@ -123,7 +102,6 @@ ProductListElement.propTypes = {
         armour: PropTypes.number,
         damage: PropTypes.number
     }),
-    onDelete: PropTypes.func.isRequired,
     onEditingDone: PropTypes.func.isRequired
 }
 

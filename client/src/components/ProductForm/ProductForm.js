@@ -107,7 +107,7 @@ const ProductForm = ({ editing, onSubmit }) => {
         <form onSubmit={e => handleSubmit(e)}>
             <Grid fluid={true} className="my-3 m-0 p-0">
                 {regularInputs.map(({ id, state, setState }) => (
-                    <Row className="form-group">
+                    <Row className="form-group" key={id}>
                         <Column
                             size={12}
                             className="mx-auto"
