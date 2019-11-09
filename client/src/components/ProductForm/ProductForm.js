@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import Input from '../Input'
 import { rarityColors, statKeys } from '../../constants'
 import { filterOutNullValues } from '../../utils'
+import Grid from '../Grid/Grid'
+import Row from '../Grid/Row'
+import Column from '../Grid/Column'
 
 const ProductForm = ({ editing, onSubmit }) => {
     const [name, setName] = useState('')
@@ -23,34 +26,6 @@ const ProductForm = ({ editing, onSubmit }) => {
         setRarity('common')
     }
 
-    const handleRemoveStat = stat => {
-        console.log('reducing')
-        const reduced = Object.keys(stats).reduce((acc, s) => {
-            if (stat !== s) {
-                return { ...acc, [s]: stats[s] }
-            }
-            return { ...acc }
-        }, {})
-        setStats(reduced)
-    }
-
-    const renderStats = () => {
-        return Object.keys(stats).map(key => (
-            <li className="list-group-item" key={key}>
-                <div className="d-flex flex-row align-items-center">
-                    {key[0].toUpperCase() + key.slice(1)} : {stats[key]}
-                    <button
-                        type="button"
-                        className="btn btn-outline-danger btn-sm ml-auto"
-                        onClick={() => handleRemoveStat(key)}
-                    >
-                        -
-                    </button>
-                </div>
-            </li>
-        ))
-    }
-
     const handleSetStats = () => {
         const value = parseInt(currentStatValue)
         if (isNaN(value)) {
@@ -63,6 +38,16 @@ const ProductForm = ({ editing, onSubmit }) => {
                 })
             }
         }
+    }
+
+    const handleRemoveStat = stat => {
+        const reduced = Object.keys(stats).reduce((acc, s) => {
+            if (stat !== s) {
+                return { ...acc, [s]: stats[s] }
+            }
+            return { ...acc }
+        }, {})
+        setStats(reduced)
     }
 
     const handleSetStock = stock => {
@@ -95,145 +80,139 @@ const ProductForm = ({ editing, onSubmit }) => {
         }
     }, [editing])
 
+    const renderStats = () => {
+        return Object.keys(stats).map(key => (
+            <li className="list-group-item" key={key}>
+                <div className="d-flex flex-row align-items-center">
+                    {key[0].toUpperCase() + key.slice(1)} : {stats[key]}
+                    <button
+                        type="button"
+                        className="btn btn-outline-danger btn-sm ml-auto"
+                        onClick={() => handleRemoveStat(key)}
+                    >
+                        -
+                    </button>
+                </div>
+            </li>
+        ))
+    }
+
+    const regularInputs = [
+        { id: 'Name', state: name, setState: setName },
+        { id: 'Description', state: description, setState: setDescription },
+        { id: 'Stock', state: stock, setState: handleSetStock }
+    ]
+
     return (
-        <div>
-            <form onSubmit={e => handleSubmit(e)}>
-                <div className="form-group px-2">
-                    <div className="row my-3">
-                        <div
-                            className="col-12 mx-auto"
+        <form onSubmit={e => handleSubmit(e)}>
+            <Grid fluid={true} className="my-3 m-0 p-0">
+                {regularInputs.map(({ id, state, setState }) => (
+                    <Row className="form-group">
+                        <Column
+                            size={12}
+                            className="mx-auto"
                             style={{ maxWidth: '400px' }}
                         >
                             <Input
-                                name={'productName'}
+                                name={`product${id}`}
                                 autoFocus={true}
-                                onChange={e => setName(e)}
-                                placeholder={'Product Name'}
-                                value={name}
-                                id="productName"
-                                label="Name"
+                                onChange={e => setState(e)}
+                                placeholder={id}
+                                value={state}
+                                id={`product${id}`}
+                                label={id}
                             />
-                        </div>
-                    </div>
+                        </Column>
+                    </Row>
+                ))}
 
-                    <div className="row my-3">
-                        <div
-                            className="col-12 mx-auto"
-                            style={{ maxWidth: '400px' }}
+                <Row className="form-group">
+                    <Column
+                        size={12}
+                        className="mx-auto"
+                        style={{ maxWidth: '400px' }}
+                    >
+                        <label>Rarity</label>
+                        <select
+                            className="custom-select"
+                            onChange={e => setRarity(e.target.value)}
+                            value={rarity}
                         >
-                            <Input
-                                name={'productDescription'}
-                                autoFocus={true}
-                                onChange={e => setDescription(e)}
-                                placeholder={'Product Description'}
-                                value={description}
-                                label="Description"
-                            />
-                        </div>
-                    </div>
+                            {Object.keys(rarityColors).map(rarity => (
+                                <option key={rarity} value={rarity}>
+                                    {rarity[0].toUpperCase() + rarity.slice(1)}
+                                </option>
+                            ))}
+                        </select>
+                    </Column>
+                </Row>
 
-                    <div className="row my-3">
-                        <div
-                            className="col-12 mx-auto"
-                            style={{ maxWidth: '400px' }}
-                        >
-                            <Input
-                                name={'productStock'}
-                                autoFocus={true}
-                                onChange={e => handleSetStock(e)}
-                                placeholder={'Number in Stock'}
-                                value={stock}
-                                label="Stock"
-                            />
-                        </div>
-                    </div>
+                <Row className="form-group">
+                    <Column
+                        size={12}
+                        className="mx-auto"
+                        style={{ maxWidth: '400px' }}
+                    >
+                        <ul className="list-group">{renderStats()}</ul>
+                    </Column>
+                </Row>
 
-                    <div className="row my-3">
-                        <div
-                            className="col-12 mx-auto"
-                            style={{ maxWidth: '400px' }}
+                <Row className="my-3">
+                    <Column
+                        size={6}
+                        className="ml-auto"
+                        style={{ maxWidth: '200px' }}
+                    >
+                        <select
+                            className="custom-select mr-sm-2"
+                            onChange={e => setCurrentStatKey(e.target.value)}
                         >
-                            <select
-                                className="custom-select"
-                                onChange={e => setRarity(e.target.value)}
-                                value={rarity}
-                            >
-                                {Object.keys(rarityColors).map(rarity => (
-                                    <option key={rarity} value={rarity}>
-                                        {rarity[0].toUpperCase() +
-                                            rarity.slice(1)}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
+                            {statKeys.map(stat => (
+                                <option key={stat} value={stat}>
+                                    {stat}
+                                </option>
+                            ))}
+                        </select>
+                    </Column>
 
-                    <div className="row my-3">
-                        <div
-                            className="col-12 mx-auto"
-                            style={{ maxWidth: '400px' }}
-                        >
-                            <ul className="list-group">{renderStats()}</ul>
-                        </div>
-                    </div>
-
-                    <div className="row my-3">
-                        <div
-                            className="col-6 ml-auto"
-                            style={{ maxWidth: '200px' }}
-                        >
-                            <select
-                                className="custom-select mr-sm-2"
-                                onChange={e =>
-                                    setCurrentStatKey(e.target.value)
-                                }
-                            >
-                                {statKeys.map(stat => (
-                                    <option key={stat} value={stat}>
-                                        {stat}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div
-                            className="col-6 mr-auto mr-sm-0"
-                            style={{ maxWidth: '200px' }}
-                        >
-                            <Input
-                                name={'productStatValue'}
-                                autoFocus={true}
-                                onChange={e => setCurrentStatValue(e)}
-                                placeholder={'Set a value'}
-                                value={currentStatValue}
-                            />
-                        </div>
+                    <Column
+                        size={6}
+                        className="mr-auto mr-sm-0"
+                        style={{ maxWidth: '200px' }}
+                    >
+                        <Input
+                            name={'productStatValue'}
+                            onChange={e => setCurrentStatValue(e)}
+                            placeholder={'Set a value'}
+                            value={currentStatValue}
+                        />
+                    </Column>
+                    <button
+                        type="button"
+                        className="btn btn-primary mx-auto mb-auto"
+                        onClick={handleSetStats}
+                    >
+                        +
+                    </button>
+                </Row>
+                <Row className="my-3">
+                    <Column
+                        size={1}
+                        className="mx-auto"
+                        style={{ maxWidth: '400px' }}
+                    >
                         <button
                             type="button"
-                            className="btn btn-primary mx-auto mb-auto"
-                            onClick={handleSetStats}
+                            className="btn btn-primary"
+                            onClick={e => handleSubmit(e)}
+                            data-dismiss="modal"
                         >
-                            +
+                            {editing ? 'Done' : 'Create'}
                         </button>
-                    </div>
-                    <div className="row my-3">
-                        <div
-                            className="col-1 mx-auto"
-                            style={{ maxWidth: '400px' }}
-                        >
-                            <button
-                                type="button"
-                                className="btn btn-primary"
-                                onClick={e => handleSubmit(e)}
-                                data-dismiss="modal"
-                            >
-                                {editing ? 'Done' : 'Create'}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+                    </Column>
+                </Row>
+            </Grid>
+        </form>
     )
 }
 

@@ -4,6 +4,10 @@
     overflow: hidden;
 }
 
+.modal-open {
+    padding-right: 0 !important;
+}
+
 /*.App * {
     border: solid black 0.1px;
 }*/

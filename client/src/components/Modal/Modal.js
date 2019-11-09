@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 const Modal = ({ children, id }) => {
     return (
         <div
-            className="modal fade"
+            className="modal fade m-0 p-0"
             id={id}
             tabIndex="-1"
             role="dialog"

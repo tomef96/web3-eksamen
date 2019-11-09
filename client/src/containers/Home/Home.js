@@ -9,7 +9,6 @@ import {
     deleteProduct
 } from '../../redux/actions'
 import ProductForm from '../../components/ProductForm'
-import ProductList from '../../components/ProductList'
 import Loader from '../../components/Loader/Loader'
 import $ from 'jquery'
 import Modal from '../../components/Modal'
@@ -54,11 +53,6 @@ const Home = ({
             )
         if (error) return <div className={center}>{error}</div>
         return (
-            /*<ProductList
-                products={products}
-                onEditingDone={putProduct}
-                onDelete={handleDelete}
-            />*/
             <div className="mx-md-auto" style={{ maxWidth: '800px' }}>
                 <h2>Products</h2>
                 <ul className="list-group ">

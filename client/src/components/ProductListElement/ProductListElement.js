@@ -18,27 +18,6 @@ const ProductListElement = ({
 }) => {
     const [isEditing, setIsEditing] = useState(false)
 
-    const renderStats = () => {
-        return Object.keys(stats).map(key => {
-            if (stats[key] !== 0) {
-                return (
-                    <li
-                        className="list-inline-item"
-                        style={{
-                            color: colors[key] || 'grey',
-                            paddingRight: '10px'
-                        }}
-                        key={key}
-                    >
-                        {key[0].toUpperCase() + key.slice(1)}: {stats[key]}
-                    </li>
-                )
-            } else {
-                return null
-            }
-        })
-    }
-
     const handleDoneEditing = product => {
         onEditingDone(product)
     }
@@ -66,6 +45,27 @@ const ProductListElement = ({
         color: rarityColors[rarity] || 'green'
     }
 
+    const renderStats = () => {
+        return Object.keys(stats).map(key => {
+            if (stats[key] !== 0) {
+                return (
+                    <li
+                        className="list-inline-item"
+                        style={{
+                            color: colors[key] || 'grey',
+                            paddingRight: '10px'
+                        }}
+                        key={key}
+                    >
+                        {key[0].toUpperCase() + key.slice(1)}: {stats[key]}
+                    </li>
+                )
+            } else {
+                return null
+            }
+        })
+    }
+
     return (
         <div className="d-flex flex-column flex-md-row justify-content-between">
             <div className="d-flex flex-column flex-grow-1">
@@ -87,7 +87,6 @@ const ProductListElement = ({
             <div className="d-flex flex-row align-self-center align-items-center">
                 <button
                     className="btn btn-link"
-                    //onClick={() => setIsEditing(true)}
                     data-toggle="modal"
                     data-target={`#editProductModal${id}`}
                 >
@@ -97,12 +96,7 @@ const ProductListElement = ({
                     className="btn btn-link text-danger"
                     data-toggle="modal"
                     data-target="#deleteProductModal"
-                    data-product={JSON.stringify({
-                        id,
-                        name,
-                        description,
-                        stats
-                    })}
+                    data-product={JSON.stringify({ id })}
                 >
                     Delete
                 </button>
