@@ -14,6 +14,7 @@ namespace LootAPI.Models
         [Required]
         public string Description { get; set; }
         
+        public string ImageUrl { get; set; }
         // STATS
         public string Rarity { get; set; }
         public int Strength { get; set; }
