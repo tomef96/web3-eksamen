@@ -40,34 +40,21 @@ const ProductList = ({
                     <Loader />
                 </div>
             )
+
         if (error) return <div className={center}>{error}</div>
 
         return (
             <div className="mx-md-auto" style={{ maxWidth: '800px' }}>
                 <h2>Products</h2>
                 <ul className="list-group ">
-                    {products.map(
-                        ({
-                            id,
-                            name,
-                            description,
-                            stock,
-                            rarity,
-                            ...stats
-                        }) => (
-                            <li className="list-group-item" key={id}>
-                                <ProductListElement
-                                    id={id}
-                                    name={name}
-                                    description={description}
-                                    rarity={rarity}
-                                    stats={stats}
-                                    stock={stock}
-                                    onEditingDone={handleEdit}
-                                />
-                            </li>
-                        )
-                    )}
+                    {products.map(product => (
+                        <li className="list-group-item" key={product.id}>
+                            <ProductListElement
+                                product={product}
+                                onEditingDone={handleEdit}
+                            />
+                        </li>
+                    ))}
                 </ul>
             </div>
         )

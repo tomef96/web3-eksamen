@@ -45,10 +45,24 @@ export const fetchProducts = () => {
     }
 }
 
-export const postProduct = ({ name, description, stock, rarity, stats }) => {
+export const postProduct = ({
+    name,
+    description,
+    stock,
+    rarity,
+    imageUrl,
+    stats
+}) => {
     return dispatch => {
         return axios
-            .post('/products', { name, description, rarity, stock, ...stats })
+            .post('/products', {
+                name,
+                description,
+                rarity,
+                stock,
+                imageUrl,
+                ...stats
+            })
             .then(
                 res => {
                     dispatch(fetchProducts())
@@ -60,7 +74,15 @@ export const postProduct = ({ name, description, stock, rarity, stats }) => {
     }
 }
 
-export const putProduct = ({ id, name, description, stock, rarity, stats }) => {
+export const putProduct = ({
+    id,
+    name,
+    description,
+    stock,
+    rarity,
+    imageUrl,
+    stats
+}) => {
     return dispatch => {
         return axios
             .put(`/products/${id}`, {
@@ -69,6 +91,7 @@ export const putProduct = ({ id, name, description, stock, rarity, stats }) => {
                 stock,
                 rarity,
                 description,
+                imageUrl,
                 ...stats
             })
             .then(res => dispatch(fetchProducts()), error => console.log(error))

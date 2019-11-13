@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import ProductForm from '../ProductForm'
 import { Link } from 'react-router-dom'
@@ -8,12 +8,7 @@ import Modal from '../Modal'
 const colors = { strength: '#c22d0c', intellect: '#0c43c2', agility: '#24c20c' }
 
 const ProductListElement = ({
-    id,
-    name,
-    description,
-    rarity,
-    stats,
-    stock,
+    product: { id, name, description, rarity, stock, imageUrl, ...stats },
     onEditingDone
 }) => {
     const stockStyle = {
@@ -63,6 +58,17 @@ const ProductListElement = ({
                     {renderStats()}
                 </ul>
             </div>
+
+            <img
+                className="img-thumbnail img-fluid ml-auto"
+                style={{
+                    maxWidth: '64px',
+                    maxHeight: '64px'
+                }}
+                src={imageUrl}
+                alt="Product"
+            />
+
             <div className="d-flex flex-row align-self-center align-items-center">
                 <button
                     className="btn btn-link"
@@ -83,7 +89,15 @@ const ProductListElement = ({
 
             <Modal id={`editProductModal${id}`}>
                 <ProductForm
-                    editing={{ id, name, description, rarity, stock, stats }}
+                    editing={{
+                        id,
+                        name,
+                        description,
+                        rarity,
+                        stock,
+                        imageUrl,
+                        stats
+                    }}
                     onSubmit={product => onEditingDone({ id, ...product })}
                 />
             </Modal>
@@ -92,15 +106,17 @@ const ProductListElement = ({
 }
 
 ProductListElement.propTypes = {
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    stats: PropTypes.shape({
-        strength: PropTypes.number,
-        intellect: PropTypes.number,
-        agility: PropTypes.number,
-        armour: PropTypes.number,
-        damage: PropTypes.number
+    product: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        stats: PropTypes.shape({
+            strength: PropTypes.number,
+            intellect: PropTypes.number,
+            agility: PropTypes.number,
+            armour: PropTypes.number,
+            damage: PropTypes.number
+        })
     }),
     onEditingDone: PropTypes.func.isRequired
 }

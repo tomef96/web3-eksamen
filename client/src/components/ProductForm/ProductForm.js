@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Input from '../Input'
 import { rarityColors, statKeys } from '../../constants'
@@ -7,14 +7,15 @@ import Grid from '../Grid/Grid'
 import Row from '../Grid/Row'
 import Column from '../Grid/Column'
 
-const ProductForm = ({ editing, onSubmit }) => {
-    const [name, setName] = useState('')
-    const [description, setDescription] = useState('')
+const ProductForm = ({ editing = {}, onSubmit }) => {
+    const [name, setName] = useState(editing.name || '')
+    const [description, setDescription] = useState(editing.description || '')
     const [currentStatKey, setCurrentStatKey] = useState(statKeys[0])
     const [currentStatValue, setCurrentStatValue] = useState('')
-    const [stats, setStats] = useState({})
-    const [stock, setStock] = useState('')
-    const [rarity, setRarity] = useState('common')
+    const [stats, setStats] = useState(filterOutNullValues(editing.stats) || {})
+    const [stock, setStock] = useState(editing.stock || 0)
+    const [rarity, setRarity] = useState(editing.rarity || 'common')
+    const [imageUrl, setImageUrl] = useState(editing.imageUrl || '')
 
     const resetState = () => {
         setName('')
@@ -24,6 +25,7 @@ const ProductForm = ({ editing, onSubmit }) => {
         setStats({})
         setStock('')
         setRarity('common')
+        setImageUrl('')
     }
 
     const handleSetStats = () => {
@@ -65,20 +67,9 @@ const ProductForm = ({ editing, onSubmit }) => {
 
     const handleSubmit = event => {
         event.preventDefault()
-        onSubmit({ name, description, stock, rarity, stats })
+        onSubmit({ name, description, stock, rarity, imageUrl, stats })
         resetState()
     }
-
-    useEffect(() => {
-        if (editing) {
-            const { name, description, stock, rarity, stats } = editing
-            setName(name)
-            setDescription(description)
-            setRarity(rarity || 'common')
-            setStats(filterOutNullValues(stats))
-            setStock(stock)
-        }
-    }, [editing])
 
     const renderStats = () => {
         return Object.keys(stats).map(key => (
@@ -105,7 +96,7 @@ const ProductForm = ({ editing, onSubmit }) => {
 
     return (
         <form onSubmit={e => handleSubmit(e)}>
-            <Grid fluid={true} className="my-3 m-0 p-0">
+            <Grid fluid={true} className="my-3 m-0 p-2">
                 {regularInputs.map(({ id, state, setState }) => (
                     <Row className="form-group" key={id}>
                         <Column
@@ -195,6 +186,37 @@ const ProductForm = ({ editing, onSubmit }) => {
                         +
                     </button>
                 </Row>
+
+                <Row className="my-3">
+                    <Column
+                        size={12}
+                        className="mx-auto"
+                        style={{ maxWidth: '400px' }}
+                    >
+                        <img
+                            className="img-thumbnail img-fluid"
+                            src={imageUrl}
+                            alt="Product"
+                        />
+                    </Column>
+                </Row>
+
+                <Row className="my-3">
+                    <Column
+                        size={12}
+                        className="mx-auto"
+                        style={{ maxWidth: '400px' }}
+                    >
+                        <Input
+                            name="Image URL"
+                            value={imageUrl}
+                            placeholder="Image URL"
+                            label="Image URL"
+                            onChange={e => setImageUrl(e)}
+                        />
+                    </Column>
+                </Row>
+
                 <Row className="my-3">
                     <Column
                         size={1}
@@ -228,7 +250,8 @@ ProductForm.propTypes = {
             agility: PropTypes.number,
             armour: PropTypes.number,
             damage: PropTypes.number
-        })
+        }),
+        imageUrl: PropTypes.string
     }),
     onSubmit: PropTypes.func.isRequired
 }
