@@ -1,7 +1,7 @@
 import React from 'react'
-import Grid from '../../components/Grid/Grid'
-import Row from '../../components/Grid/Row'
-import Column from '../../components/Grid/Column'
+import Grid from '../Grid/Grid'
+import Row from '../Grid/Row'
+import Column from '../Grid/Column'
 
 const NotFound = () => {
     return (
